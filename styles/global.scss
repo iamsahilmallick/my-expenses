@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@300;400;500;600;700&display=swap');
+
+* {
+  outline: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto Serif', serif !important;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hide scrollbar for Chrome, Safari, Edge */
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Hide scrollbar for Firefox */
+body {
+  scrollbar-width: none !important;
+}
+
+/* Hide scrollbar for IE/Legacy */
+body {
+  -ms-overflow-style: none;
+}
+
+i {
+  font-size: 0;
+  line-height: 0;
+}
+
+.font-inherit {
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+}
+
+p {
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+img {
+  max-width: 100%;
+}
