@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
       '@typescript-eslint/no-unused-vars': ['error'],
       '@typescript-eslint/no-unused-expressions': 'off',
       '@next/next/no-img-element': 'off',
+      'react-hooks/preserve-manual-memoization': 'off',
       'react-hooks/exhaustive-deps': 'off',
       'react-hooks/set-state-in-effect': 'off',
       'react/no-unescaped-entities': 'off',
