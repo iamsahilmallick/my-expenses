@@ -1,25 +1,48 @@
-import { Box, styled, Switch } from '@mui/material';
+import { Box, styled, Switch, SwitchProps } from '@mui/material';
 import { useState } from 'react';
 
-const CustomSwitch = () => {
-  const [checked, setChecked] = useState(true);
+interface CommonSwitchProps extends Omit<SwitchProps, 'onChange'> {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onChange?: (checked: boolean) => void;
+}
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+const CommonSwitch = ({
+  checked,
+  defaultChecked = false,
+  onChange,
+  disabled,
+  ...props
+}: CommonSwitchProps) => {
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+
+  const isControlled = typeof checked === 'boolean';
+  const value = isControlled ? checked : internalChecked;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.checked;
+
+    if (!isControlled) {
+      setInternalChecked(newValue);
+    }
+
+    onChange?.(newValue);
   };
 
   return (
     <CustomSwitchWrap>
       <Switch
-        checked={checked}
+        checked={value}
         onChange={handleChange}
-        className={checked === true ? 'checked' : ''}
+        disabled={disabled}
+        disableRipple
+        {...props}
       />
     </CustomSwitchWrap>
   );
 };
 
-export default CustomSwitch;
+export default CommonSwitch;
 
 export const CustomSwitchWrap = styled(Box)`
   .MuiSwitch-root {
@@ -49,7 +72,7 @@ export const CustomSwitchWrap = styled(Box)`
     }
 
     .MuiSwitch-track {
-      background: ${({ theme }) => theme.palette.primary.light};
+      background: #a5ada7; /* <-- unchecked color */
       opacity: 1;
     }
   }

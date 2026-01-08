@@ -3,6 +3,7 @@ import { GlobalStateInterface } from '../interfaces/interfaces';
 
 const initialState: GlobalStateInterface = {
   open: false,
+  logoutModal: false,
 };
 
 const globalSlice = createSlice({
@@ -12,9 +13,13 @@ const globalSlice = createSlice({
     setOpen: (state, action: PayloadAction<boolean>) => {
       state.open = action.payload;
     },
+    setLogoutModal: (state, action: PayloadAction<boolean>) => {
+      console.log('action', action);
+      state.logoutModal = action.payload;
+    },
   },
 });
 
-export const { setOpen } = globalSlice.actions;
+export const { setOpen, setLogoutModal } = globalSlice.actions;
 
 export default globalSlice.reducer;

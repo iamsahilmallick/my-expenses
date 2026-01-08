@@ -16,3 +16,11 @@ export type DayjsFormat =
   | 'ddd MMM'
   | 'DD MMM YYYY hh:mm A'
   | 'DD / MM / YY';
+
+export type TApiParams = {
+  page: number;
+  limit: number;
+  search?: string;
+  type?: string;
+  isActive?: boolean;
+};

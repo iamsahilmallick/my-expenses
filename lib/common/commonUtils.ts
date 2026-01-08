@@ -2,12 +2,25 @@ import { DayjsFormat } from '@/typescripts/types';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import utc from 'dayjs/plugin/utc';
+import { GetServerSidePropsContext } from 'next';
+import { parseCookies } from 'nookies';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
 
+export const isTrue = (value?: string) => value === 'true';
+
 export const isEmptyObject = (obj: Record<string, unknown>): boolean => {
   return Object.keys(obj).length === 0;
+};
+
+export const getCookieVal = (
+  key: string,
+  ctx?: GetServerSidePropsContext,
+  fallback = ''
+): string => {
+  const cookies = parseCookies(ctx);
+  return cookies?.[key] ?? fallback;
 };
 
 export const navigateTo = (route: string, replace: boolean = false): void => {
@@ -18,6 +31,12 @@ export const navigateTo = (route: string, replace: boolean = false): void => {
       window.location.href = route;
     }
   }
+};
+
+export const _truncatedFirstName = (fullName?: string, maxLength: number = 10): string => {
+  if (!fullName?.trim()) return 'Unknown';
+  const firstName = fullName.trim().split(' ')[0] || 'Unknown';
+  return firstName.length > maxLength ? `${firstName.slice(0, maxLength)}...` : firstName;
 };
 
 /** Prevents any non-numeric input via keyboard */

@@ -1,7 +1,7 @@
 import { mediaPaths } from '@/config/constants';
 
-export const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL;
-export const baseUrlApi = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/v1`;
+export const baseUrl = process.env.NEXT_APP_BASE_URL;
+export const baseUrlApi = `${process.env.NEXT_APP_BASE_URL}/api/v1`;
 
 export const getMediaUrl = (key: keyof typeof mediaPaths, filename: string) => {
   const path = mediaPaths[key] || 'others';
@@ -16,29 +16,33 @@ export const endpoints = {
     getAll: 'notifications',
   },
   auth: {
-    login: 'auth/login',
+    login: 'users/login',
+    register: 'users/register',
     profile: 'users/profile',
-    profileUpdate: 'users/profile',
-    profileDelete: 'users/profile',
-    emailTrigger: 'users/email-trigger',
+    resendOTp: 'users/resend-otp',
+    verifyOTp: 'users/verify-otp',
+    profileUpdate: 'users/profile/update',
+    profileDelete: 'users/profile/delete',
   },
-  legalOffices: {
-    category: 'legal-offices/category',
-    register: 'legal-offices/register',
-    getoffices: 'legal-offices',
-    getDetails: 'legal-offices',
-    updateDetails: 'legal-offices',
-    deleteOffices: 'legal-offices',
-    officeApproval: 'legal-offices/request',
-    imgDelete: 'legal-offices',
-    searchOffice: 'legal-offices/search',
+  category: {
+    create: 'category/create',
+    update: 'category/update',
+    list: 'category/get',
+    delete: 'category/delete',
+    statusChanger: 'category/status-changer',
   },
-  cases: {
-    create: 'cases',
-    get: 'cases',
-    getDetails: 'cases',
-    updateCase: 'cases',
+  stats: {
+    topCat: 'stats/top-category-wise',
+    monthly: 'stats/monthly',
   },
 };
 
-export const successEndpoints = [endpoints?.legalOffices?.register];
+export const successEndpoints = [
+  endpoints?.auth?.register,
+  endpoints?.auth?.login,
+  endpoints?.auth?.resendOTp,
+  endpoints?.auth?.verifyOTp,
+  endpoints?.auth?.profileUpdate,
+  endpoints?.category.create,
+  endpoints?.category.delete,
+];

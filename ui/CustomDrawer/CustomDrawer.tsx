@@ -11,7 +11,6 @@ interface drawerProps {
 
 export default function CustomDrawer({ open, onClose, children, className }: drawerProps) {
   const mobile = useMediaQuery('(max-width:899px)');
-  console.log('className', className);
   return (
     <CustomDrawerWrapper
       open={open}

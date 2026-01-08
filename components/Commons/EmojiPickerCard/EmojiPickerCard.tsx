@@ -3,6 +3,7 @@ import { Box, Stack, styled, Typography } from '@mui/material';
 interface EmojiPickerCardProps {
   title?: string;
   emojis: string[];
+  value?: string;
   onSelect?: (emoji: string) => void;
 }
 
@@ -11,7 +12,7 @@ export const EmojiCardWrapper = styled(Stack)`
   max-width: 400px;
   background-color: #ffffff;
   border-radius: 12px;
-  padding: 16px;
+  padding: 16px ;
   gap: 8px;
 
   .emoji-card-title {
@@ -25,7 +26,9 @@ export const EmojiCardWrapper = styled(Stack)`
     flex-wrap: wrap;
     gap: 8px;
     max-height: 150px;
+    justify-content: center;
     overflow-y: auto;
+    padding: 10px 15px 20px 10px;
 
     /* Custom scrollbar */
     scrollbar-width: thin;
@@ -53,7 +56,7 @@ export const EmojiCardWrapper = styled(Stack)`
 
   .emoji-item {
     font-size: 24px;
-    padding: 6px;
+    padding: 7px;
     border: 1px solid #ccc;
     border-radius: 8px;
     cursor: pointer;
@@ -66,6 +69,11 @@ export const EmojiCardWrapper = styled(Stack)`
       background-color: #f0f0f0;
       transform: scale(1.1);
     }
+    &.selected {
+      border-color: #1976d2;
+      background-color: #e3f2fd;
+      transform: scale(1.15);
+    }
   }
 `;
 
@@ -73,13 +81,18 @@ const EmojiPickerCard: React.FC<EmojiPickerCardProps> = ({
   title = 'Choose Emoji:',
   emojis,
   onSelect,
+  value,
 }) => {
   return (
     <EmojiCardWrapper direction="column">
       <Typography className="emoji-card-title">{title}</Typography>
       <Box className="emoji-list">
         {emojis.map((emoji, index) => (
-          <Box key={index} className="emoji-item" onClick={() => onSelect?.(emoji)}>
+          <Box
+            key={index}
+            className={`emoji-item ${value === emoji ? 'selected' : ''}`}
+            onClick={() => onSelect?.(emoji)}
+          >
             {emoji}
           </Box>
         ))}

@@ -180,14 +180,30 @@ export const DashboardHeaderStyled = styled(Box)`
     display: none;
     line-height: 0;
     font-size: 0;
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+      font-size: 0;
+      text-decoration: none;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 70px;
+      object-fit: contain;
+      display: block;
+    }
     @media (max-width: 1199px) {
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 10px 0 0;
     }
-
     @media (max-width: 899px) {
+      margin-right: 8px;
       img {
         max-width: 60px;
       }
@@ -195,14 +211,15 @@ export const DashboardHeaderStyled = styled(Box)`
 
     @media (max-width: 599px) {
       margin: 4px 4px 0 0;
+
       img {
-        max-width: 60px;
+        max-width: 52px;
       }
     }
-    a {
-      line-height: 0;
-      font-size: 0;
-      text-decoration: none;
+    @media (max-width: 399px) {
+      img {
+        max-width: 48px;
+      }
     }
   }
 `;
@@ -214,6 +231,7 @@ export const AvatarMenu = styled(Menu, {
     width: 200px;
     box-shadow: 0px 3px 28px -6px rgba(0, 0, 0, 0.08);
     border-radius: 10px;
+    z-index: 0;
     ul {
       padding: 17px 17px;
       li {
@@ -223,7 +241,7 @@ export const AvatarMenu = styled(Menu, {
         text-transform: capitalize !important;
 
         padding: 9px 0;
-        &:first-child {
+        &:first-of-type {
           padding-top: 0px;
         }
         &:last-child {

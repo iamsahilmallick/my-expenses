@@ -10,8 +10,17 @@ interface SeoWrapperProps {
 
 const SeoWrapper = ({ title, description }: SeoWrapperProps) => {
   const pathname = usePathname();
+  const getPageTitleFromPath = (pathname: string) => {
+    if (PageNames[pathname]) return PageNames[pathname];
 
-  const resolvedTitle = title || `${PageNames[pathname]} | ${ProjectName}` || `${ProjectName}`;
+    // fallback: derive name from URL
+    const lastSegment = pathname.split('/').filter(Boolean).pop();
+    if (!lastSegment) return ProjectName;
+
+    return lastSegment.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+  };
+  const pageTitle = title ?? getPageTitleFromPath(pathname);
+  const resolvedTitle = pageTitle ? `${pageTitle} | ${ProjectName}` : ProjectName;
   const resolvedDescription =
     description ||
     `${resolvedTitle} - Manage your finances, track expenses, incomes, categories and reports.`;

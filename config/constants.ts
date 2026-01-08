@@ -34,11 +34,12 @@ export const ProjectCurrency = {
   EUR: '€',
 };
 
-export const tokenDuration = '20d';
+export const tokenDuration = '7d';
 
 export const mediaPaths: Record<string, string> = {
   profileImage: 'users/profile_image',
 };
+
 
 export const genderOptions = [
   { label: 'Male', value: 'male' },

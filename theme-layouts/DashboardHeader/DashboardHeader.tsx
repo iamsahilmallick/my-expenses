@@ -1,9 +1,9 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/commons/useReduxHook';
+import { _truncatedFirstName } from '@/lib/common/commonUtils';
+import { setLogoutModal } from '@/redux-toolkit/slices/globalSlice';
 import assets from '@/resources/assets';
 import { AvatarMenu, DashboardHeaderStyled } from '@/styles/CustomStyled/DashboardHeaderStyled';
-import { LogoutStyled } from '@/styles/CustomStyled/LogoutStyled';
-import CustomDrawer from '@/ui/CustomDrawer/CustomDrawer';
 import ArrowLeftIcon from '@/ui/Icons/ArrowLeftIcon';
-import LogoutIcon from '@/ui/Icons/LogoutIcon';
 import NotiIcon from '@/ui/Icons/NotiIcon';
 import {
   Box,
@@ -30,16 +30,18 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
   backUrl,
   ...props
 }) => {
+  const dispatch = useAppDispatch();
   const headerRef = useRef<HTMLDivElement>(null);
   const avatarBlockRef = useRef<HTMLDivElement>(null);
   const [headerHeight, setHeaderHeight] = useState<number | undefined>(0);
   const [avatarMenuWidth, setAvatarMenuWidth] = useState<number | undefined>(0);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const [logoutModalOpen, setLogOutModalOpen] = useState(false);
 
+  const { userProfile } = useAppSelector(state => state.auth);
+  const { logoutModal } = useAppSelector(state => state.global);
   const handelLogoutModal = () => {
-    setLogOutModalOpen(!logoutModalOpen);
+    handleClose();
+    dispatch(setLogoutModal(!logoutModal));
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -137,9 +139,9 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
             </Button>
             <Button
               id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
+              aria-controls={Boolean(anchorEl) ? 'basic-menu' : undefined}
               aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
+              aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
               onClick={handleClick}
               className="avatar_btn"
               disableRipple
@@ -147,12 +149,12 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
               <Typography component="i" className="avatar_image">
                 <Image src={assets?.nouser} alt="avatar image" width={100} height={100} />
               </Typography>
-              <Typography>Angel Rosser</Typography>
+              <Typography>{_truncatedFirstName(userProfile?.fullName)}</Typography>
             </Button>
             <AvatarMenu
               id="basic-menu"
               anchorEl={anchorEl}
-              open={open}
+              open={Boolean(anchorEl)}
               onClose={handleClose}
               avatarMenuWidth={avatarMenuWidth}
             >
@@ -162,27 +164,6 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
           </Box>
         </Stack>
       </Stack>
-
-      <CustomDrawer open={logoutModalOpen} onClose={handelLogoutModal}>
-        <LogoutStyled>
-          <figure>
-            <LogoutIcon />
-          </figure>
-          <Typography variant="h2">Do You Want To Logout?</Typography>
-          <Typography variant="body1">
-            Vitae risus convallis aliquam lacus mattis et vel phare tra. Purus consequat tempor dui
-            quis sed sapien quisque a feugiat quam.
-          </Typography>
-          <Stack direction={'row'} alignItems={'center'} gap={'12px'}>
-            <Button variant="outlined" color="primary" onClick={handelLogoutModal}>
-              No
-            </Button>
-            <Button variant="contained" color="primary" LinkComponent={Link} href="/auth/login/">
-              Yes
-            </Button>
-          </Stack>
-        </LogoutStyled>
-      </CustomDrawer>
     </DashboardHeaderStyled>
   );
 };

@@ -1,4 +1,5 @@
 import OTPCard from '@/components/Commons/OTPCard/OTPCard';
+import { checkUserAuth } from '@/lib/common/authUtils';
 import assets from '@/resources/assets';
 import { LoginWrapper } from '@/styles/CustomStyled/AuthWrapperStyled';
 import AuthWrapper from '@/theme-layouts/AuthWrapper/AuthWrapper';
@@ -7,6 +8,7 @@ import CustomButton from '@/ui/CustomButton/CustomButton';
 import CustomInput from '@/ui/CustomInput/CustomInput';
 import EmailIcon from '@/ui/Icons/EmailIcon';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 
@@ -114,3 +116,9 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  return checkUserAuth({
+    context: context,
+  });
+};

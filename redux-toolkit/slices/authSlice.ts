@@ -1,3 +1,5 @@
+import { _projectToken, _reduxAuthStorage } from '@/config/keys.constants';
+import { ProfileDoc } from '@/typescripts/interfaces/profile.interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { destroyCookie } from 'nookies';
 import { userSliceData } from '../interfaces/interfaces';
@@ -11,7 +13,7 @@ export const authSlice = createSlice({
   name: 'authSlice',
   initialState,
   reducers: {
-    setProfileData: (state, { payload }: { payload: unknown | null }) => {
+    setProfileData: (state, { payload }: { payload: ProfileDoc | null }) => {
       if (!payload) {
         state.userProfile = null;
         state.isLoggedIn = false;
@@ -25,9 +27,9 @@ export const authSlice = createSlice({
       state.userProfile = null;
       localStorage.clear();
       sessionStorage.clear();
-      destroyCookie(null, '_user_storage', { path: '/' });
-      destroyCookie(null, '_vejen_til_jura', { path: '/' });
-      window.location.href = '/';
+      destroyCookie(null, _reduxAuthStorage, { path: '/' });
+      destroyCookie(null, _projectToken, { path: '/' });
+      window.location.href = '/auth/login';
     },
   },
 });

@@ -29,9 +29,15 @@ interface EmptyStateProps {
   text?: string;
   description?: string;
   textVariant?: TypographyProps['variant'];
+  descVariant?: TypographyProps['variant'];
 }
 
-const EmptyState = ({ text = 'Data', description, textVariant = 'h2' }: EmptyStateProps) => {
+const EmptyState = ({
+  text = 'Data',
+  description,
+  textVariant = 'h2',
+  descVariant = 'body1',
+}: EmptyStateProps) => {
   return (
     <EmptyStateWrap>
       <i>
@@ -42,7 +48,7 @@ const EmptyState = ({ text = 'Data', description, textVariant = 'h2' }: EmptySta
           No {text} Found
         </Typography>
         {description && (
-          <Typography variant="body2" className="desc" mt={1}>
+          <Typography variant={descVariant} className="desc" mt={2}>
             {description}
           </Typography>
         )}

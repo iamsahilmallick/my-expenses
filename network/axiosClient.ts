@@ -1,10 +1,11 @@
+import { _projectToken } from '@/config/keys.constants';
+import { getCookieVal } from '@/lib/common/commonUtils';
 import { globalError, globalSuccess, globalWarning } from '@/lib/functions/_helpers.lib';
 import eventEmitter from '@/lib/services/event.emitter';
 import events from '@/resources/events/events';
 import { TRootApResponse } from '@/typescripts/enum/HttpStatusCodeEnum';
 import { NetworkRoot } from '@/typescripts/enum/common.enum';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { parseCookies } from 'nookies';
 import { baseUrlApi, successEndpoints } from './endpoints';
 
 let isAlreadyHandlingUnauthorized = false;
@@ -16,8 +17,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(config => {
-  const cookies = parseCookies();
-  const token = cookies[process.env.NEXT_PUBLIC_APP_TOKEN_NAME!];
+  const token = getCookieVal(_projectToken);
   if (token && !!config.headers) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }

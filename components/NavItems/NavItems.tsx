@@ -16,7 +16,11 @@ export const sidebarMenus: {
     name: 'Home',
     route: `${ProjectRoutes.dashboard.home}`,
   },
-
+  {
+    icon: <MyTaskIcon />,
+    name: 'Category',
+    route: `${ProjectRoutes.dashboard.category}/`,
+  },
   {
     icon: <ExpensesIcon />,
     name: 'My Expenses',
@@ -27,11 +31,7 @@ export const sidebarMenus: {
     name: 'My Incomes',
     route: `${ProjectRoutes.dashboard.incomes}/`,
   },
-  {
-    icon: <MyTaskIcon />,
-    name: 'Category',
-    route: `${ProjectRoutes.dashboard.category}/`,
-  },
+
   {
     icon: <ReportIcon />,
     name: 'Reports',

@@ -1,21 +1,23 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/commons/useReduxHook';
+import { setLogoutModal } from '@/redux-toolkit/slices/globalSlice';
 import assets from '@/resources/assets';
-import { LogoutStyled } from '@/styles/CustomStyled/LogoutStyled';
 import { TDashoboardSidebarProps } from '@/typescripts/interfaces/common.interfaces';
-import CustomDrawer from '@/ui/CustomDrawer/CustomDrawer';
 import LogoutIcon from '@/ui/Icons/LogoutIcon';
 
-import { Button, List, ListItem, ListItemButton, Stack, styled, Typography } from '@mui/material';
+import { List, ListItem, ListItemButton, Stack, styled, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 
 const DashboardSidebar: React.FC<TDashoboardSidebarProps> = ({ navItems }) => {
   const pathName = usePathname();
-  const [logoutModalOpen, setLogOutModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const { logoutModal } = useAppSelector(state => state.global);
+
   const handelLogoutModal = () => {
-    setLogOutModalOpen(!logoutModalOpen);
+    dispatch(setLogoutModal(!logoutModal));
   };
   return (
     <DashboardSidebarWrapper>
@@ -71,26 +73,6 @@ const DashboardSidebar: React.FC<TDashoboardSidebarProps> = ({ navItems }) => {
           </ListItem>
         </List>
       </Box>
-      <CustomDrawer open={logoutModalOpen} onClose={handelLogoutModal}>
-        <LogoutStyled>
-          <figure>
-            <LogoutIcon />
-          </figure>
-          <Typography variant="h2">Do You Want To Logout?</Typography>
-          <Typography variant="body1">
-            Vitae risus convallis aliquam lacus mattis et vel phare tra. Purus consequat tempor dui
-            quis sed sapien quisque a feugiat quam.
-          </Typography>
-          <Stack direction={'row'} alignItems={'center'} gap={'12px'}>
-            <Button variant="outlined" color="primary" onClick={handelLogoutModal}>
-              No
-            </Button>
-            <Button variant="contained" color="primary" LinkComponent={Link} href="/auth/login/">
-              Yes
-            </Button>
-          </Stack>
-        </LogoutStyled>
-      </CustomDrawer>
     </DashboardSidebarWrapper>
   );
 };

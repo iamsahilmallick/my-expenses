@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Chip, styled, Typography } from '@mui/material';
+import { Box, Card, CardContent, Chip, Skeleton, styled, Typography } from '@mui/material';
 
 export const SummaryCardWrapper = styled(Box)`
   .summary-card {
@@ -89,6 +89,7 @@ interface SummaryCardProps {
   amountClass?: string;
   chipLabel?: string;
   chipClass?: string;
+  loading?: boolean;
 }
 
 const SummaryCard = ({
@@ -100,6 +101,7 @@ const SummaryCard = ({
   chipLabel,
   chipClass,
   iconClass,
+  loading,
 }: SummaryCardProps) => {
   return (
     <SummaryCardWrapper>
@@ -112,11 +114,15 @@ const SummaryCard = ({
             <span className={`card-icon ${iconClass}`}>{Icon}</span>
           </Box>
 
-          <Typography variant="h4" className={`card-amount ${amountClass}`}>
-            {price}
-          </Typography>
+          {loading ? (
+            <Skeleton variant="text" width={120} height={30} />
+          ) : (
+            <Typography variant="h4" className={`card-amount ${amountClass}`}>
+              {price}
+            </Typography>
+          )}
 
-          <Chip size="small" label={chipLabel} className={chipClass} />
+          {chipLabel && <Chip size="small" label={chipLabel} className={chipClass} />}
         </CardContent>
       </Card>
     </SummaryCardWrapper>

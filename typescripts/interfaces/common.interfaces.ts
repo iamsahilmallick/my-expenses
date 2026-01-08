@@ -8,6 +8,28 @@ export type TDashoboardSidebarProps = {
   }[];
 };
 
+export interface ICommonTableProps {
+  children?: React.ReactNode;
+  headList: string[];
+  title?: string;
+  isFilter?: boolean;
+  isAdd?: boolean;
+  addOnClick?: () => void;
+  btnIcon?: React.ReactNode;
+  page?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  isLoading?: boolean;
+  skeletonRows?: number;
+  isSearch?: boolean;
+  searchValue?: string;
+  searchPlaceholder?: string;
+  onSearchChange?: (value: string) => void;
+  isEmpty?: boolean;
+  emptyText?: string;
+  emptyDescription?: string;
+}
+
 export interface ICustomIconProps {
   IconColor?: string;
   IconWidth?: string;
@@ -25,21 +47,31 @@ export interface TCommonRoot {
   message: string;
   data?: unknown;
   statusCode: number;
+  success: boolean;
+  token: string;
 }
 
 export interface TRootResponse<T> {
-  success: boolean;
   status: number;
+  type: string;
   message: string;
+  statusCode: number;
+  success: boolean;
+  token: string;
   data: T;
   pagination?: TPaginateMeta;
 }
 
 export interface TPaginateMeta {
-  page: number;
-  size: number;
-  totalRecords: number;
+  totalDocs: number;
+  limit: number;
   totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: unknown;
+  nextPage: unknown;
 }
 
 export interface TRootError {

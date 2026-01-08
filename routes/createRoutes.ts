@@ -7,17 +7,17 @@ export enum ROUTES_TYPE {
 
 export const ProjectRoutes = {
   landingPage: ROUTES_TYPE.landingPage,
-  login: `${ROUTES_TYPE.auth}/login/`,
-  register: `${ROUTES_TYPE.auth}/sign-up/`,
-  forgotPassword: `${ROUTES_TYPE.auth}/forgot-password/`,
+  login: `${ROUTES_TYPE.auth}/login`,
+  register: `${ROUTES_TYPE.auth}/sign-up`,
+  forgotPassword: `${ROUTES_TYPE.auth}/forgot-password`,
   dashboard: {
-    home: `${ROUTES_TYPE.dashboard}/`,
-    expenses: `${ROUTES_TYPE.dashboard}/expenses/`,
-    incomes: `${ROUTES_TYPE.dashboard}/incomes/`,
-    category: `${ROUTES_TYPE.dashboard}/category/`,
-    report: `${ROUTES_TYPE.dashboard}/report/`,
-    profile: `${ROUTES_TYPE.dashboard}/profile/`,
-    settings: `${ROUTES_TYPE.dashboard}/settings/`,
+    home: `${ROUTES_TYPE.dashboard}`,
+    expenses: `${ROUTES_TYPE.dashboard}/expenses`,
+    incomes: `${ROUTES_TYPE.dashboard}/incomes`,
+    category: `${ROUTES_TYPE.dashboard}/category`,
+    report: `${ROUTES_TYPE.dashboard}/report`,
+    profile: `${ROUTES_TYPE.dashboard}/profile`,
+    settings: `${ROUTES_TYPE.dashboard}/settings`,
   },
 };
 

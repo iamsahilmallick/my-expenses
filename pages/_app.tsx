@@ -1,5 +1,6 @@
 import EventListeners from '@/components/Commons/EventListener/EventListener';
 import SeoWrapper from '@/components/Commons/SeoWrapper/SeoWrapper';
+import LogoutDrawer from '@/components/Drawers/LogoutDrawer';
 import { checkWindow } from '@/lib/functions/_helpers.lib';
 import { wrapper } from '@/redux-toolkit/store/store';
 import '@/styles/global.scss';
@@ -47,6 +48,7 @@ export default function CustomApp({ Component, ...rest }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <ProjectThemeProvider>
             <SeoWrapper />
+            <LogoutDrawer />
             <EventListeners />
             <Toaster position="top-left" richColors />
             <Component {...pageProps} />

@@ -5,6 +5,7 @@ export const CustomDrawerWrapper = styled(Drawer)`
     max-width: 757px;
     background: transparent;
     box-shadow: none;
+    opacity: 1;
 
     @media (max-width: 899px) {
       width: 100%;

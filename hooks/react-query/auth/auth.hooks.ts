@@ -1,25 +1,29 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { ProfileQueryEnum } from '../keys/query-keys';
-import { getProfile, loginFunc, updateProfile } from './auth.func';
+import { loginFunc, resendOtpFunc, signUpFunc, verifyOtpFunc } from './auth.func';
 
-// Social Login
-export const useSocialSignUp = () =>
+// Login
+export const useLogin = () =>
   useMutation({
     mutationFn: loginFunc,
     mutationKey: [ProfileQueryEnum.login],
   });
 
-// Get Profile Hook
-export const useProfile = () => {
-  return useQuery({
-    queryKey: [ProfileQueryEnum.getProfile],
-    queryFn: getProfile,
-  });
-};
-
-// update profile
-export const useUpdateProfile = () =>
+// Register
+export const useSignUp = () =>
   useMutation({
-    mutationFn: updateProfile,
-    mutationKey: [ProfileQueryEnum.updateProfile],
+    mutationFn: signUpFunc,
+    mutationKey: [ProfileQueryEnum.register],
+  });
+
+export const useResendOTP = () =>
+  useMutation({
+    mutationFn: resendOtpFunc,
+    mutationKey: [ProfileQueryEnum.resendOTp],
+  });
+
+export const useVerifyOTP = () =>
+  useMutation({
+    mutationFn: verifyOtpFunc,
+    mutationKey: [ProfileQueryEnum.verifyOTp],
   });

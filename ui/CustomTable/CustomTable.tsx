@@ -1,9 +1,12 @@
+import EmptyState from '@/components/Commons/EmptyState/EmptyState';
 import { CustomTableWrapper } from '@/styles/CustomStyled/CustomTableWrapper';
+import { ICommonTableProps } from '@/typescripts/interfaces/common.interfaces';
 import LeftArrowIcon from '@/ui/Icons/LeftArrowIcon';
 import RightIcon from '@/ui/Icons/RightIcon';
 import AddIcon from '@mui/icons-material/Add';
 import {
   Pagination,
+  Skeleton,
   Stack,
   Table,
   TableBody,
@@ -18,16 +21,6 @@ import CustomButton from '../CustomButton/CustomButton';
 import CustomInput from '../CustomInput/CustomInput';
 import FilterIcon from '../Icons/FilterIcon';
 
-interface ICommonTableProps {
-  children?: React.ReactNode;
-  headList: string[];
-  title?: string;
-  isFilter?: boolean;
-  isAdd?: boolean;
-  addOnClick?: () => void;
-  btnIcon?: React.ReactNode;
-}
-
 const CustomTable = ({
   children,
   headList,
@@ -36,24 +29,25 @@ const CustomTable = ({
   btnIcon,
   isAdd,
   addOnClick,
+  page = 1,
+  totalPages = 1,
+  onPageChange,
+  isLoading,
+  skeletonRows,
+  isSearch = false,
+  searchValue,
+  searchPlaceholder = 'Search...',
+  onSearchChange,
+  isEmpty = false,
+  emptyText,
+  emptyDescription,
 }: ICommonTableProps) => {
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const totalPages = 6;
+  const [currentPage, setCurrentPage] = React.useState(page);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handlePrev = () => {
-    if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
-    }
+  const handlePageChange = (value: number) => {
+    setCurrentPage(value);
+    if (!onPageChange) return;
+    onPageChange(value);
   };
 
   return (
@@ -69,7 +63,16 @@ const CustomTable = ({
           {title}
         </Typography>
         <Stack direction="row" alignItems="center" gap={1.5} className="search_group">
-          <CustomInput size="small" placeholder="Search..." className="search_input" />
+          {isSearch && (
+            <CustomInput
+              size="small"
+              placeholder={searchPlaceholder}
+              className="search_input"
+              value={searchValue}
+              onChange={e => onSearchChange?.(e.target.value)}
+            />
+          )}
+
           {isFilter && (
             <CustomButton className="filter_btn">{btnIcon ? btnIcon : <FilterIcon />}</CustomButton>
           )}
@@ -90,39 +93,74 @@ const CustomTable = ({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>{children}</TableBody>
+          <TableBody>
+            {isLoading ? (
+              Array.from({ length: skeletonRows || 5 }).map((_, rowIndex) => (
+                <TableRow key={rowIndex}>
+                  {headList.map((_, cellIndex) => (
+                    <TableCell key={cellIndex}>
+                      <Skeleton variant="rectangular" height={25} />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : isEmpty ? (
+              <TableRow>
+                <TableCell colSpan={headList.length}>
+                  <EmptyState text={emptyText} description={emptyDescription} />
+                </TableCell>
+              </TableRow>
+            ) : (
+              children
+            )}
+          </TableBody>
         </Table>
       </TableContainer>
 
-      <Stack
-        className="pagination_stack"
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        gap={2.5}
-      >
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
-          variant="outlined"
-          shape="rounded"
-          hideNextButton
-          hidePrevButton
-        />
+      {totalPages > 1 && (
+        <Stack
+          className="pagination_stack"
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          gap={2.5}
+        >
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(_, value) => handlePageChange(value)}
+            variant="outlined"
+            shape="rounded"
+            hideNextButton
+            hidePrevButton
+          />
 
-        <Stack className="pagination_right" direction="row" alignItems="center" gap={2.5}>
-          <Typography variant="body1">Showing 01 out of 06</Typography>
-          <Stack className="arrow_btns_stack" direction="row" alignItems="center">
-            <CustomButton variant="contained" color="primary" onClick={handlePrev}>
-              <LeftArrowIcon IconColor="currentcolor" />
-            </CustomButton>
-            <CustomButton variant="contained" color="primary" onClick={handleNext}>
-              <RightIcon IconColor="currentcolor" />
-            </CustomButton>
+          <Stack className="pagination_right" direction="row" alignItems="center" gap={2.5}>
+            <Typography variant="body1">
+              {' '}
+              Showing {page} out of {totalPages}
+            </Typography>
+            <Stack className="arrow_btns_stack" direction="row" alignItems="center">
+              <CustomButton
+                variant="contained"
+                color="primary"
+                disabled={page <= 1 || !onPageChange}
+                onClick={() => handlePageChange(page - 1)}
+              >
+                <LeftArrowIcon IconColor="currentcolor" />
+              </CustomButton>
+              <CustomButton
+                variant="contained"
+                color="primary"
+                disabled={page >= totalPages || !onPageChange}
+                onClick={() => handlePageChange(page + 1)}
+              >
+                <RightIcon IconColor="currentcolor" />
+              </CustomButton>
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
+      )}
     </CustomTableWrapper>
   );
 };
