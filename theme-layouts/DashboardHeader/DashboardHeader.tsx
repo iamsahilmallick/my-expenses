@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/commons/useReduxHook';
 import { _truncatedFirstName } from '@/lib/common/commonUtils';
 import { setLogoutModal } from '@/redux-toolkit/slices/globalSlice';
 import assets from '@/resources/assets';
+import { ProjectRoutes } from '@/routes/createRoutes';
 import { AvatarMenu, DashboardHeaderStyled } from '@/styles/CustomStyled/DashboardHeaderStyled';
 import ArrowLeftIcon from '@/ui/Icons/ArrowLeftIcon';
 import NotiIcon from '@/ui/Icons/NotiIcon';
@@ -17,7 +18,9 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 interface headerProps extends BoxProps {
   headerHeightCallBack: (data: number) => void;
@@ -30,6 +33,7 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
   backUrl,
   ...props
 }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const headerRef = useRef<HTMLDivElement>(null);
   const avatarBlockRef = useRef<HTMLDivElement>(null);
@@ -134,7 +138,13 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
           ref={avatarBlockRef}
         >
           <Box className="avatar_block">
-            <Button type="button" className="notificationButton">
+            <Button
+              type="button"
+              className="notificationButton"
+              onClick={() => {
+                toast.info('Under Development');
+              }}
+            >
               <NotiIcon />
             </Button>
             <Button
@@ -147,7 +157,13 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
               disableRipple
             >
               <Typography component="i" className="avatar_image">
-                <Image src={assets?.nouser} alt="avatar image" width={100} height={100} />
+                <Image
+                  src={userProfile?.profilePic ? userProfile?.profilePic : assets?.nouser}
+                  alt="avatar image"
+                  width={100}
+                  height={100}
+                  priority
+                />
               </Typography>
               <Typography>{_truncatedFirstName(userProfile?.fullName)}</Typography>
             </Button>
@@ -158,7 +174,14 @@ const DashboardHeader: React.FC<headerProps & BoxProps> = ({
               onClose={handleClose}
               avatarMenuWidth={avatarMenuWidth}
             >
-              <MenuItem onClick={handleClose}>My Profile </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  router.push(ProjectRoutes.dashboard.profile);
+                  handleClose();
+                }}
+              >
+                My Profile{' '}
+              </MenuItem>
               <MenuItem onClick={handelLogoutModal}>Logout</MenuItem>
             </AvatarMenu>
           </Box>

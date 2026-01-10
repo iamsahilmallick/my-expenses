@@ -19,6 +19,7 @@ export const endpoints = {
     login: 'users/login',
     register: 'users/register',
     profile: 'users/profile',
+    changePass: 'users/change-password',
     resendOTp: 'users/resend-otp',
     verifyOTp: 'users/verify-otp',
     profileUpdate: 'users/profile/update',

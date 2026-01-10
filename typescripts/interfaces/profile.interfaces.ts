@@ -15,4 +15,5 @@ export interface ProfileDoc {
   subscriptionStatus: string;
   createdAt: string;
   updatedAt: string;
+  socialLinks: string[];
 }

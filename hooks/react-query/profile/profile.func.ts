@@ -11,6 +11,15 @@ export const profileFunc = async () => {
 
 // Update profile
 export const updateProfile = async (body: FormData) => {
-  const res = await axiosInstance.patch<TCommonRoot>(endpoints.auth.profileUpdate, body);
+  const res = await axiosInstance.put<TCommonRoot>(endpoints.auth.profileUpdate, body);
+  return res?.data;
+};
+
+export const changePassFunc = async (body: {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}) => {
+  const res = await axiosInstance.post<TCommonRoot>(endpoints.auth.changePass, body);
   return res?.data;
 };

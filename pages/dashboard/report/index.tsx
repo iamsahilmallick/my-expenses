@@ -88,7 +88,7 @@ const Report = () => {
           <Grid size={{ xs: 12, md: 3 }}>
             <SummaryCard
               title="Wallet Balance"
-              price={monthlyStats?.totalSaving || 0}
+              price={monthlyStats?.walletBalance || 0}
               Icon={<Payments />}
               borderClass="border-error"
               iconClass="icon-error"

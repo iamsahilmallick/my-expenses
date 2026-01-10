@@ -56,7 +56,7 @@ const DashboardSidebar: React.FC<TDashoboardSidebarProps> = ({ navItems }) => {
           {navItems?.map((navItem, index) => {
             return (
               <ListItem key={index}>
-                <Link href={navItem.route} className={navItem.route === pathName ? 'active' : ''}>
+                <Link href={navItem.route} className={`${navItem.route}/` === pathName ? 'active' : ''}>
                   <i>{navItem.icon}</i>
                   <Typography className="font-inherit">{navItem.name}</Typography>
                 </Link>

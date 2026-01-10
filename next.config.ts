@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'myexpense-api.vercel.app', pathname: '/**' },
       { protocol: 'http', hostname: 'localhost:4500', pathname: '/**' },
-      { protocol: 'https', hostname: 'd1g8oinzeo7bqw.cloudfront.net', pathname: '/**' },
+      { protocol: 'https', hostname: 'ik.imagekit.io', pathname: '/**' },
     ],
   },
 

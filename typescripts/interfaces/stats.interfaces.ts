@@ -13,6 +13,6 @@ export interface TopCategoryDoc {
 export interface MonthlyStatsDoc {
   totalIncome: number;
   totalExpense: number;
-  totalSaving: number;
+  walletBalance: number;
   annualSaving: number;
 }

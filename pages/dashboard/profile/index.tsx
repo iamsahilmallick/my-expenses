@@ -1,18 +1,19 @@
 import ChangePasswordDrawer from '@/components/Drawers/ChangePasswordDrawer';
+import ProfileUpdateDrawer from '@/components/Drawers/ProfileUpdateDrawer';
 import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton';
 import useUserProfile from '@/hooks/react-query/useUserProfile';
 import { MyProfileWrapper } from '@/styles/CustomStyled/MyProfileWrapper';
 import DashboardWrapper from '@/theme-layouts/DashboardWrapper/DashboardWrapper';
 import AddIcon from '@mui/icons-material/Add';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import LinkIcon from '@mui/icons-material/Link';
 import { Avatar, Box, Card, Grid, IconButton, Typography } from '@mui/material';
 import { useState } from 'react';
 
+type DrawerType = 'changePassword' | 'updateProfile' | null;
+
 const Profile = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [activeDrawer, setActiveDrawer] = useState<DrawerType>(null);
   const { data: profileData, isPending: profilePending } = useUserProfile();
   return (
     <DashboardWrapper headerTitle="My Profile" backUrl="/">
@@ -45,7 +46,7 @@ const Profile = () => {
                       '&:hover': { bgcolor: '#0a2d52' },
                     }}
                     type="button"
-                    onClick={() => setIsDrawerOpen(true)}
+                    onClick={() => setActiveDrawer('changePassword')}
                   >
                     Change Password
                   </IconButton>
@@ -56,7 +57,7 @@ const Profile = () => {
             <Card className="sectionCard">
               <Box className="sectionHeader">
                 <Typography variant="h6">Personal Details</Typography>
-                <IconButton>
+                <IconButton type="button" onClick={() => setActiveDrawer('updateProfile')}>
                   <EditIcon />
                 </IconButton>
               </Box>
@@ -64,20 +65,20 @@ const Profile = () => {
               <Grid container spacing={3}>
                 <Grid size={{ xs: 12, md: 6 }}>
                   <Typography>
-                    <strong>Name:</strong>
+                    <strong>Name: </strong>
                     {profileData?.fullName}
                   </Typography>
                   <Typography mt={1}>
-                    <strong>Phone:</strong> {profileData?.phone}
+                    <strong>Phone: </strong> {profileData?.phone}
                   </Typography>
                 </Grid>
 
                 <Grid size={{ xs: 12, md: 6 }}>
                   <Typography>
-                    <strong>Email:</strong> {profileData?.email}
+                    <strong>Email: </strong> {profileData?.email}
                   </Typography>
                   <Typography mt={1}>
-                    <strong>Role:</strong> {profileData?.role}
+                    <strong>Role: </strong> {profileData?.role}
                   </Typography>
                 </Grid>
               </Grid>
@@ -86,43 +87,21 @@ const Profile = () => {
             <Card className="sectionCard">
               <Box className="sectionHeader">
                 <Typography variant="h6">Social Links</Typography>
-                <IconButton>
-                  <EditIcon />
-                </IconButton>
               </Box>
 
               <Box display="flex" flexDirection="column" gap={2}>
-                <Box className="socialCard">
-                  <Box display="flex" gap={1} alignItems="center">
-                    <LinkIcon color="primary" />
-                    <Typography>@simbrooklyn</Typography>
-                  </Box>
-                  <Box>
-                    <IconButton>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </Box>
+                {profileData?.socialLinks?.map(socialItem => {
+                  return (
+                    <Box className="socialCard" key={socialItem}>
+                      <Box display="flex" gap={1} alignItems="center">
+                        <LinkIcon color="primary" />
+                        <Typography>{socialItem}</Typography>
+                      </Box>
+                    </Box>
+                  );
+                })}
 
-                <Box className="socialCard">
-                  <Box display="flex" gap={1} alignItems="center">
-                    <ColorLensIcon color="secondary" />
-                    <Typography>#simbrooklyn</Typography>
-                  </Box>
-                  <Box>
-                    <IconButton>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </Box>
-
-                <Box className="addNewLink">
+                <Box className="addNewLink" onClick={() => setActiveDrawer('updateProfile')}>
                   <AddIcon /> Add New Link
                 </Box>
               </Box>
@@ -130,10 +109,12 @@ const Profile = () => {
           </>
         )}
       </MyProfileWrapper>
-      <ChangePasswordDrawer
-        openDrawer={isDrawerOpen}
-        toggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)}
-      />
+      {activeDrawer === 'changePassword' && (
+        <ChangePasswordDrawer openDrawer toggleDrawer={() => setActiveDrawer(null)} />
+      )}
+      {activeDrawer === 'updateProfile' && (
+        <ProfileUpdateDrawer openDrawer toggleDrawer={() => setActiveDrawer(null)} />
+      )}
     </DashboardWrapper>
   );
 };

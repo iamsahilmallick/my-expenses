@@ -5,6 +5,7 @@ export enum ProfileQueryEnum {
   verifyOTp = 'verify-otp',
   getProfile = 'useer-profile',
   updateProfile = 'update-profile',
+  changePass = 'update-changePassFunc',
 }
 
 export enum CategoryQuery {

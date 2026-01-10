@@ -115,4 +115,10 @@ export const CustomDrawerWrapper = styled(Drawer)`
       width: 100% !important;
     }
   }
+  .profileUpdate {
+    width: 550px !important;
+    @media (max-width: 899px) {
+      width: 100% !important;
+    }
+  }
 `;
