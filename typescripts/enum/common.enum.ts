@@ -28,3 +28,10 @@ export enum TStorageType {
   COOKIES = 'cookies',
   CUSTOM = 'custom',
 }
+
+export enum PaymentMethodEnum {
+  CASH = 'cash',
+  CARD = 'card',
+  UPI = 'upi',
+  BANK = 'bank',
+}

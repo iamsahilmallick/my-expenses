@@ -6,6 +6,7 @@ export const useMonthlyStats = () => {
   return useQuery({
     queryKey: [StatsQueryKeys.monthly],
     queryFn: monthlyStats,
+    refetchOnWindowFocus: true,
   });
 };
 
@@ -13,5 +14,6 @@ export const useTopCategory = () => {
   return useQuery({
     queryKey: [StatsQueryKeys.topCat],
     queryFn: topCategory,
+    refetchOnWindowFocus: true,
   });
 };

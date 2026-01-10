@@ -150,7 +150,7 @@ const AddEditCategoryDrawer = ({ openDrawer, toggleDrawer, refetch, editData }: 
           </Box>
           <Box className="btnWrapper">
             <Button fullWidth disableRipple variant="contained" color="primary" type="submit">
-              Add Category
+              {isEditMode ? 'Edit Category' : 'Add Category'}
             </Button>
           </Box>
         </Box>

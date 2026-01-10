@@ -31,6 +31,18 @@ export const endpoints = {
     delete: 'category/delete',
     statusChanger: 'category/status-changer',
   },
+  income: {
+    create: 'income/create',
+    update: 'income/update',
+    list: 'income/getAll',
+    delete: 'income/delete',
+  },
+  expense: {
+    create: 'expense/create',
+    update: 'expense/update',
+    list: 'expense/getAll',
+    delete: 'expense/delete',
+  },
   stats: {
     topCat: 'stats/top-category-wise',
     monthly: 'stats/monthly',
@@ -45,4 +57,6 @@ export const successEndpoints = [
   endpoints?.auth?.profileUpdate,
   endpoints?.category.create,
   endpoints?.category.delete,
+  endpoints?.income.create,
+  endpoints?.income.delete,
 ];

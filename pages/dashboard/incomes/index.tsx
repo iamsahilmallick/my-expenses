@@ -1,41 +1,110 @@
-import AddIncomeDrawer from '@/components/Drawers/AddIncomeDrawer';
-import { incomeData } from '@/resources/mock';
+import BackdropLoader from '@/components/Commons/BackdropLoader/BackdropLoader';
+import AddEditIncomeDrawer from '@/components/Drawers/AddEditIncomeDrawer';
+import { useDebounce } from '@/hooks/commons/useDebounce';
+import { useDeleteIncome, useGetIncomeList } from '@/hooks/react-query/income/income.hook';
+import { dateOnly } from '@/lib/common/commonUtils';
 import { MyIncomesWrapper } from '@/styles/CustomStyled/MyIncomesWrapper';
 import DashboardWrapper from '@/theme-layouts/DashboardWrapper/DashboardWrapper';
+import { IIncomeDoc } from '@/typescripts/interfaces/incomeExpense.interfaces';
 import CustomButton from '@/ui/CustomButton/CustomButton';
-import CustomSwitch from '@/ui/CustomSwitch/CustomSwitch';
 import CustomTable from '@/ui/CustomTable/CustomTable';
 import DeleteIcon from '@/ui/Icons/DeleteIcon';
 import PenIcon from '@/ui/Icons/PenIcon';
 import { Box, Stack, TableCell, TableRow } from '@mui/material';
 import { useState } from 'react';
 
+interface IEditState {
+  isEditing: boolean;
+  editDoc: IIncomeDoc | null;
+}
+
 const Incomes = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [paginate, setPaginate] = useState({
+    page: 1,
+    limit: 5,
+    search: '',
+  });
+  const [editState, setEditState] = useState<IEditState>({
+    isEditing: false,
+    editDoc: null,
+  });
+  const searchDelay = useDebounce(paginate?.search, 500);
+  const { mutate: catIncome, isPending: catDeletePending } = useDeleteIncome();
+  const {
+    data: getAllIncomes,
+    isPending: incomePending,
+    refetch,
+  } = useGetIncomeList({
+    page: paginate.page,
+    limit: paginate.limit,
+    search: searchDelay,
+  });
+
+  const handleEditIncome = (cat: IIncomeDoc) => {
+    setEditState({
+      isEditing: true,
+      editDoc: cat,
+    });
+    setIsDrawerOpen(true);
+  };
+
+  const handleDeleteIncome = (id: string) => {
+    catIncome(id, {
+      onSuccess: res => {
+        if (res?.success) {
+          refetch();
+        }
+      },
+    });
+  };
 
   return (
     <DashboardWrapper headerTitle="My Incomes" backUrl="/">
+      {catDeletePending && (
+        <BackdropLoader
+          open={catDeletePending}
+          text={catDeletePending ? 'Please Wait... While Deleting the income' : 'Please Wait...'}
+        />
+      )}
       <MyIncomesWrapper>
         <Box className="incomeWrapper">
           <CustomTable
-            headList={['Item Name', 'Category', 'Amount', 'Paid By', 'Date', 'Status', 'Action']}
+            headList={['Item Name', 'Category', 'Amount', 'Paid By', 'Date', 'Action']}
             title=" Income Details"
             isFilter
             isAdd
             addOnClick={() => setIsDrawerOpen(true)}
+            page={paginate.page}
+            totalPages={getAllIncomes?.pagination?.totalPages}
+            isLoading={incomePending}
+            skeletonRows={7}
+            isSearch
+            searchValue={paginate.search}
+            isEmpty={!incomePending && getAllIncomes?.data?.length === 0}
+            emptyText="Incomes"
+            emptyDescription="No income found. Please add a new income."
+            onSearchChange={value =>
+              setPaginate(prev => ({
+                ...prev,
+                search: value,
+                page: 1,
+              }))
+            }
+            onPageChange={value =>
+              setPaginate(prev => ({
+                ...prev,
+                page: value,
+              }))
+            }
           >
-            {incomeData.map((item, index) => (
+            {getAllIncomes?.data?.map((incomeItem, index) => (
               <TableRow key={index} className="incomeRow">
-                <TableCell className="boldCell">{item.sourceName}</TableCell>
-                <TableCell>{item.category}</TableCell>
-                <TableCell className="amountCell">₹{item.amount}</TableCell>
-                <TableCell>{item.receivedFrom}</TableCell>
-                <TableCell>{item.date}</TableCell>
-
-                <TableCell>
-                  <CustomSwitch />
-                </TableCell>
-
+                <TableCell className="boldCell">{incomeItem.title}</TableCell>
+                <TableCell>{incomeItem.categoryId?.title}</TableCell>
+                <TableCell className="amountCell">₹{incomeItem.amount}</TableCell>
+                <TableCell>Sahil</TableCell>
+                <TableCell>{dateOnly(incomeItem.createdAt)}</TableCell>
                 <TableCell>
                   <Stack direction="row" alignItems="center" gap={1.5}>
                     <CustomButton
@@ -43,6 +112,7 @@ const Incomes = () => {
                       color="primary"
                       className="actionBtn"
                       startIcon={<PenIcon IconColor="currentcolor" />}
+                      onClick={() => handleEditIncome(incomeItem)}
                     >
                       Edit
                     </CustomButton>
@@ -52,6 +122,9 @@ const Incomes = () => {
                       color="error"
                       className="actionBtn"
                       startIcon={<DeleteIcon />}
+                      onClick={() => {
+                        handleDeleteIncome(incomeItem?._id);
+                      }}
                     >
                       Delete
                     </CustomButton>
@@ -62,10 +135,17 @@ const Incomes = () => {
           </CustomTable>
         </Box>
       </MyIncomesWrapper>
-      <AddIncomeDrawer
-        openDrawer={isDrawerOpen}
-        toggleDrawer={() => setIsDrawerOpen(!isDrawerOpen)}
-      />
+      {isDrawerOpen && (
+        <AddEditIncomeDrawer
+          openDrawer={isDrawerOpen}
+          toggleDrawer={() => {
+            setIsDrawerOpen(false);
+            setEditState({ isEditing: false, editDoc: null });
+          }}
+          editData={editState?.editDoc}
+          refetch={() => refetch()}
+        />
+      )}
     </DashboardWrapper>
   );
 };

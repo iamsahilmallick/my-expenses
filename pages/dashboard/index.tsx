@@ -57,7 +57,19 @@ const DashboardHome = () => {
           <Grid container spacing={3} className="summary-cards-container">
             <Grid size={{ xs: 12, md: 3 }}>
               <SummaryCard
-                title="Expense"
+                title="Wallet Balance"
+                price={monthlyStats?.totalSaving || 0}
+                Icon={<Payments />}
+                borderClass="border-error"
+                iconClass="icon-error"
+                amountClass="amount-negative"
+                chipClass="chip-negative"
+                loading={statsPending}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 3 }}>
+              <SummaryCard
+                title="Monthly Expense"
                 price={monthlyStats?.totalExpense || 0}
                 Icon={<TrendingUp />}
                 borderClass="border-success"
@@ -70,25 +82,12 @@ const DashboardHome = () => {
 
             <Grid size={{ xs: 12, md: 3 }}>
               <SummaryCard
-                title="Income"
+                title="Monthly Income"
                 price={monthlyStats?.totalIncome || 0}
                 Icon={<AccountBalanceWallet />}
                 borderClass="border-info"
                 iconClass="icon-info"
                 chipClass="chip-positive"
-                loading={statsPending}
-              />
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 3 }}>
-              <SummaryCard
-                title="Total Saving"
-                price={monthlyStats?.totalSaving || 0}
-                Icon={<Payments />}
-                borderClass="border-error"
-                iconClass="icon-error"
-                amountClass="amount-negative"
-                chipClass="chip-negative"
                 loading={statsPending}
               />
             </Grid>

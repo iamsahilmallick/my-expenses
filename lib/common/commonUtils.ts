@@ -33,6 +33,9 @@ export const navigateTo = (route: string, replace: boolean = false): void => {
   }
 };
 
+export const toSentenceCase = (value: string) =>
+  value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+
 export const _truncatedFirstName = (fullName?: string, maxLength: number = 10): string => {
   if (!fullName?.trim()) return 'Unknown';
   const firstName = fullName.trim().split(' ')[0] || 'Unknown';
@@ -194,4 +197,9 @@ export const dateOnly = (dateTimeStr: string, format: DayjsFormat = 'DD MMM YYYY
   if (!dateTimeStr?.includes('T')) return '';
   const datePart = dateTimeStr.split('T')[0];
   return dayjs(datePart).format(format);
+};
+export const toYMD = (date?: string | Date | null, format: DayjsFormat = 'YYYY-MM-DD'): string => {
+  if (!date) return '';
+  const d = dayjs(date);
+  return d.isValid() ? d.format(format) : '';
 };

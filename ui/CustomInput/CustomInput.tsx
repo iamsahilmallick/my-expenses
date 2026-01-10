@@ -6,7 +6,7 @@ import React, { forwardRef, useCallback, useState } from 'react';
 import EyeOffIcon from '../Icons/EyeOffIcon';
 import EyeOnIcon from '../Icons/EyeOnIcon';
 
-const CustomInputWrap = styled(TextField)`
+export const CustomInputWrap = styled(TextField)`
   .MuiInputBase-root {
     background: ${({ theme }) => theme.palette.customColors?.bodyBg};
     border-radius: 13px;

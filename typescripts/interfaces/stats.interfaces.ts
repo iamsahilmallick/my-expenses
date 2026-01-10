@@ -4,8 +4,10 @@ export type TopCategoryRoot = TRootResponse<TopCategoryDoc[]>;
 export type MonthlyStatsRoot = TRootResponse<MonthlyStatsDoc>;
 
 export interface TopCategoryDoc {
+  categoryId: string;
   categoryTitle: string;
-  totalExpense: number;
+  totalAmount: number;
+  type: string;
 }
 
 export interface MonthlyStatsDoc {

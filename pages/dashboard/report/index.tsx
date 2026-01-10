@@ -1,4 +1,6 @@
 import SummaryCard from '@/components/Commons/SummaryCard';
+import { ProjectCurrency } from '@/config/constants';
+import { useMonthlyStats, useTopCategory } from '@/hooks/react-query/stats/stats.hook';
 import { ReportWrapper } from '@/styles/CustomStyled/ReportWrapper';
 import DashboardWrapper from '@/theme-layouts/DashboardWrapper/DashboardWrapper';
 import CustomButton from '@/ui/CustomButton/CustomButton';
@@ -23,17 +25,13 @@ import {
   FormControl,
   Grid,
   MenuItem,
+  Skeleton,
   Typography,
 } from '@mui/material';
 
 const Report = () => {
-  const categoryStats = [
-    { category: 'Food & Dining', amount: 450, percentage: 32, trend: 'up' },
-    { category: 'Transportation', amount: 120, percentage: 9, trend: 'down' },
-    { category: 'Shopping', amount: 300, percentage: 21, trend: 'up' },
-    { category: 'Utilities', amount: 150, percentage: 11, trend: 'stable' },
-    { category: 'Entertainment', amount: 200, percentage: 14, trend: 'up' },
-  ];
+  const { data: monthlyStats, isPending: statsPending } = useMonthlyStats();
+  const { data: topCategoryWise, isPending: topCategoryPending } = useTopCategory();
 
   return (
     <DashboardWrapper headerTitle="Financial Reports" backUrl="/">
@@ -89,49 +87,51 @@ const Report = () => {
         <Grid container spacing={3} className="summary-cards-container">
           <Grid size={{ xs: 12, md: 3 }}>
             <SummaryCard
-              title="Income"
-              price={50000}
-              Icon={<TrendingUp />}
-              borderClass="border-success"
-              iconClass="icon-success"
-              amountClass="amount-positive"
-              chipLabel="+12%"
-              chipClass="chip-positive"
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 3 }}>
-            <SummaryCard
-              title="Balance"
-              price={15000}
-              Icon={<AccountBalanceWallet />}
-              borderClass="border-info"
-              iconClass="icon-info"
-              chipLabel="Stable"
-              chipClass="chip-positive"
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 3 }}>
-            <SummaryCard
-              title="Expenses"
-              price={20000}
+              title="Wallet Balance"
+              price={monthlyStats?.totalSaving || 0}
               Icon={<Payments />}
               borderClass="border-error"
               iconClass="icon-error"
               amountClass="amount-negative"
-              chipLabel="-5%"
               chipClass="chip-negative"
+              loading={statsPending}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 3 }}>
             <SummaryCard
-              title="Savings Rate"
-              price={50000}
+              title="Monthly Expense"
+              price={monthlyStats?.totalExpense || 0}
+              Icon={<TrendingUp />}
+              borderClass="border-success"
+              iconClass="icon-success"
+              amountClass="amount-positive"
+              chipClass="chip-positive"
+              loading={statsPending}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 3 }}>
+            <SummaryCard
+              title="Monthly Income"
+              price={monthlyStats?.totalIncome || 0}
+              Icon={<AccountBalanceWallet />}
+              borderClass="border-info"
+              iconClass="icon-info"
+              chipClass="chip-positive"
+              loading={statsPending}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 3 }}>
+            <SummaryCard
+              title="Annual Saving"
+              price={monthlyStats?.annualSaving || 0}
               Icon={<Savings />}
               borderClass="border-success"
               iconClass="icon-success"
               amountClass="amount-positive"
-              chipLabel="+8%"
               chipClass="chip-positive"
+              loading={statsPending}
             />
           </Grid>
         </Grid>
@@ -143,25 +143,40 @@ const Report = () => {
                   Top Expenses by Category
                 </Typography>
                 <Box className="category-list">
-                  {categoryStats.map((stat, index) => (
-                    <Box key={index} className="category-item">
-                      <Box className="category-info">
-                        <Typography variant="body1" className="category-name">
-                          {stat.category}
-                        </Typography>
-                        <Typography variant="body2" className="category-percentage">
-                          {stat.percentage}%
-                        </Typography>
+                  {topCategoryPending ? (
+                    Array.from({ length: 5 }).map((_, index) => (
+                      <Box key={index} className="category-item">
+                        <Box className="category-info">
+                          <Skeleton variant="text" width={120} height={24} />
+                        </Box>
+                        <Box className="category-amount">
+                          <Skeleton variant="text" width={80} height={24} />
+                        </Box>
                       </Box>
-                      <Box className="category-amount">
-                        <Typography variant="body1" className="amount">
-                          ${stat.amount}
-                        </Typography>
-                        {stat.trend === 'up' && <TrendingUp className="trend-icon up" />}
-                        {stat.trend === 'down' && <TrendingDown className="trend-icon down" />}
+                    ))
+                  ) : topCategoryWise && topCategoryWise?.length > 0 ? (
+                    topCategoryWise?.map((stat, index) => (
+                      <Box key={index} className="category-item">
+                        <Box className="category-info">
+                          <Typography variant="body1" className="category-name">
+                            {stat.categoryTitle}
+                          </Typography>
+                        </Box>
+                        <Box className="category-amount">
+                          <Typography variant="body1" className="amount">
+                            {ProjectCurrency.INR}
+                            {stat.totalAmount}
+                          </Typography>
+                          {stat.type === 'expense' && <TrendingUp className="trend-icon up" />}
+                          {stat.type === 'income' && <TrendingDown className="trend-icon down" />}
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
+                    ))
+                  ) : (
+                    <Alert severity="info" className="no-data-alert">
+                      No category data found for the selected period.
+                    </Alert>
+                  )}
                 </Box>
               </CardContent>
             </Card>
@@ -170,21 +185,23 @@ const Report = () => {
             <Card className="insights-card">
               <CardContent>
                 <Typography variant="h5" className="section-title">
-                  Financial Insights
+                  Why This App is Useful
                 </Typography>
                 <Box className="insights-list">
                   <Alert severity="info" className="insight-item">
-                    Your food expenses are 32% of total spending. Consider meal planning to reduce
-                    costs.
+                    Track your expenses and income easily in one place.
                   </Alert>
                   <Alert severity="success" className="insight-item">
-                    Great job! Your savings rate is 25% this month.
+                    Understand your spending habits and make smarter financial decisions.
                   </Alert>
                   <Alert severity="warning" className="insight-item">
-                    Transportation costs decreased by 15% compared to last month.
+                    Plan your monthly budget and stay on top of your savings goals.
                   </Alert>
                   <Alert severity="info" className="insight-item">
-                    You're on track to meet your monthly budget goals.
+                    Get insights into top spending categories and where to save.
+                  </Alert>
+                  <Alert severity="info" className="insight-item">
+                    Helps you build better financial habits over time.
                   </Alert>
                 </Box>
               </CardContent>

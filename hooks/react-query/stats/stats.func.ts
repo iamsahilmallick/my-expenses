@@ -9,5 +9,5 @@ export const monthlyStats = async () => {
 
 export const topCategory = async () => {
   const res = await axiosInstance.get<TopCategoryRoot>(endpoints.stats.topCat);
-  return res?.data;
+  return res?.data?.data;
 };

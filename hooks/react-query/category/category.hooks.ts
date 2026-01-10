@@ -39,6 +39,7 @@ export const useGetCategoryList = (params: TApiParams) =>
     select: res => {
       return res;
     },
+    refetchOnMount: true,
   });
 
 export const useCategoryStatusChanger = () =>

@@ -1,18 +1,46 @@
-import { Box, styled, TextField } from '@mui/material';
+import { Box, styled, TextField, TextFieldProps } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
+import { Control, FieldValues, Path } from 'react-hook-form';
 import DatePickerIcon from '../Icons/DatePickerIcon';
 
-interface datePickerProps {
+interface CustomDatePickerProps<T extends FieldValues> {
+  name?: Path<T>;
+  control?: Control<T>;
   placeholder?: string;
   className?: string;
+  value?: Dayjs | null;
+  onChange?: (date: Dayjs | null) => void;
+  error?: boolean;
+  helperText?: string;
+  disabled?: boolean;
+  minDate?: Dayjs;
+  maxDate?: Dayjs;
+  textFieldProps?: Partial<TextFieldProps>;
 }
 
-const CustomDatePicker = ({ placeholder, className }: datePickerProps) => {
+const CustomDatePicker = <T extends FieldValues>({
+  placeholder,
+  className,
+  value,
+  onChange,
+  error,
+  helperText,
+  disabled,
+  minDate,
+  maxDate,
+  textFieldProps,
+}: CustomDatePickerProps<T>) => {
   return (
     <CustomDatePickerStyle className={className}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DesktopDatePicker
+          value={value || null}
+          onChange={onChange}
+          disabled={disabled}
+          minDate={minDate}
+          maxDate={maxDate}
           slots={{
             openPickerIcon: DatePickerIcon,
             textField: TextField,
@@ -20,6 +48,9 @@ const CustomDatePicker = ({ placeholder, className }: datePickerProps) => {
           slotProps={{
             textField: {
               placeholder: placeholder,
+              error: error,
+              helperText: helperText,
+              ...textFieldProps,
             },
           }}
         />
@@ -40,7 +71,7 @@ export const CustomDatePickerStyle = styled(Box)`
     width: 100%;
     .MuiInputBase-root {
       /* border: 1px solid; */
-      color: rgba(29, 24, 21, 1);
+      color: black;
       padding-right: 0;
       font-size: 13px;
       @media (max-width: 1199px) {
