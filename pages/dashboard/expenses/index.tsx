@@ -67,7 +67,7 @@ const Expenses = () => {
       <MyExpenseWrapper>
         <Box className="expenseWrapper">
           <CustomTable
-            headList={['Item Name', 'Category', 'Amount', 'Paid By', 'Date', 'Action']}
+            headList={['Item Name', 'Category', 'Amount', 'Date', 'Action']}
             title=" Expense Details"
             isFilter
             isAdd
@@ -100,7 +100,6 @@ const Expenses = () => {
                 <TableCell className="boldCell">{incomeItem.title}</TableCell>
                 <TableCell>{incomeItem.categoryId?.title}</TableCell>
                 <TableCell className="amountCell">₹{incomeItem.amount}</TableCell>
-                <TableCell>Sahil</TableCell>
                 <TableCell>{dateOnly(incomeItem.createdAt)}</TableCell>
                 <TableCell>
                   <Stack direction="row" alignItems="center" gap={1.5}>
@@ -139,7 +138,7 @@ const Expenses = () => {
             setIsDrawerOpen(false);
             setEditState({ isEditing: false, editDoc: null });
           }}
-          editData={editState?.editDoc}
+          editData={editState?.editDoc || null}
           refetch={() => refetch()}
         />
       )}

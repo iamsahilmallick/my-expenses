@@ -12,6 +12,7 @@ export interface IIncomeDoc {
   description: string;
   incomeDate: string;
   paymentMethod: string;
+  paymentStatus: string;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -25,7 +26,7 @@ export interface IExpenseDoc {
   title: string;
   amount: number;
   description: string;
-  incomeDate: string;
+  expenseDate: string;
   paymentMethod: string;
   isDeleted: boolean;
   createdAt: string;

@@ -3,7 +3,7 @@ import { useCreateExpense, useUpdateExpense } from '@/hooks/react-query/expense/
 import { toSentenceCase, toYMD } from '@/lib/common/commonUtils';
 import { expenseSchema, ExpenseSchemaType } from '@/lib/schemas/incomeExpense.schema';
 import { PaymentMethodEnum } from '@/typescripts/enum/common.enum';
-import { IIncomeDoc } from '@/typescripts/interfaces/incomeExpense.interfaces';
+import { IExpenseDoc } from '@/typescripts/interfaces/incomeExpense.interfaces';
 import CustomAutocomplete from '@/ui/CustomAutocomplete/CustomAutocomplete';
 import CustomDatePicker from '@/ui/CustomDatePicker/CustomDatePicker';
 import CustomDrawer from '@/ui/CustomDrawer/CustomDrawer';
@@ -21,7 +21,7 @@ interface DrawerProps {
   openDrawer: boolean;
   toggleDrawer: () => void;
   refetch?: () => void;
-  editData?: IIncomeDoc | null;
+  editData: IExpenseDoc | null;
 }
 
 const AddEditExpenseDrawer = ({ openDrawer, toggleDrawer, editData, refetch }: DrawerProps) => {
@@ -105,7 +105,7 @@ const AddEditExpenseDrawer = ({ openDrawer, toggleDrawer, editData, refetch }: D
         paymentMethod: editData.paymentMethod
           ? (editData.paymentMethod as PaymentMethodEnum)
           : undefined,
-        expenseDate: editData.incomeDate ? dayjs(editData.incomeDate).format('YYYY-MM-DD') : '',
+        expenseDate: editData.expenseDate ? dayjs(editData.expenseDate).format('YYYY-MM-DD') : '',
       });
     }
   }, [editData, reset]);

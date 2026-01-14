@@ -1,7 +1,12 @@
 import BackdropLoader from '@/components/Commons/BackdropLoader/BackdropLoader';
+import StatusBadge from '@/components/Commons/StatusBadge/StatusBadge';
 import AddEditIncomeDrawer from '@/components/Drawers/AddEditIncomeDrawer';
 import { useDebounce } from '@/hooks/commons/useDebounce';
-import { useDeleteIncome, useGetIncomeList } from '@/hooks/react-query/income/income.hook';
+import {
+  useDeleteIncome,
+  useGetIncomeList,
+  useUpdatePaymentStatus,
+} from '@/hooks/react-query/income/income.hook';
 import { dateOnly } from '@/lib/common/commonUtils';
 import { MyIncomesWrapper } from '@/styles/CustomStyled/MyIncomesWrapper';
 import DashboardWrapper from '@/theme-layouts/DashboardWrapper/DashboardWrapper';
@@ -31,6 +36,7 @@ const Incomes = () => {
   });
   const searchDelay = useDebounce(paginate?.search, 500);
   const { mutate: catIncome, isPending: catDeletePending } = useDeleteIncome();
+  const { mutate: updateStatus, isPending: incomePayStatusPending } = useUpdatePaymentStatus();
   const {
     data: getAllIncomes,
     isPending: incomePending,
@@ -59,18 +65,35 @@ const Incomes = () => {
     });
   };
 
+  const handleStatusChange = (id: string, status: 'received' | 'failed') => {
+    updateStatus(
+      { id, body: { paymentStatus: status } },
+      {
+        onSuccess: res => {
+          if (res?.success) {
+            refetch();
+          }
+        },
+      }
+    );
+  };
+
   return (
     <DashboardWrapper headerTitle="My Incomes" backUrl="/">
-      {catDeletePending && (
+      {(catDeletePending || incomePayStatusPending) && (
         <BackdropLoader
-          open={catDeletePending}
-          text={catDeletePending ? 'Please Wait... While Deleting the income' : 'Please Wait...'}
+          open={catDeletePending || incomePayStatusPending}
+          text={
+            catDeletePending
+              ? 'Please Wait... While Deleting the income'
+              : 'Please Wait... While Updating payment status'
+          }
         />
       )}
       <MyIncomesWrapper>
         <Box className="incomeWrapper">
           <CustomTable
-            headList={['Item Name', 'Category', 'Amount', 'Paid By', 'Date', 'Action']}
+            headList={['Item Name', 'Category', 'Amount', 'Payment Status', 'Date', 'Action']}
             title=" Income Details"
             isFilter
             isAdd
@@ -103,7 +126,15 @@ const Incomes = () => {
                 <TableCell className="boldCell">{incomeItem.title}</TableCell>
                 <TableCell>{incomeItem.categoryId?.title}</TableCell>
                 <TableCell className="amountCell">₹{incomeItem.amount}</TableCell>
-                <TableCell>Sahil</TableCell>
+                <TableCell>
+                  <StatusBadge
+                    status={incomeItem.paymentStatus}
+                    showActions={incomeItem.paymentStatus === 'upcoming'}
+                    onApprove={() => handleStatusChange(incomeItem._id, 'received')}
+                    onReject={() => handleStatusChange(incomeItem._id, 'failed')}
+                  />
+                </TableCell>
+
                 <TableCell>{dateOnly(incomeItem.createdAt)}</TableCell>
                 <TableCell>
                   <Stack direction="row" alignItems="center" gap={1.5}>

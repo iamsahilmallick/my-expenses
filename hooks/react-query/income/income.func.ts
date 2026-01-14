@@ -42,3 +42,13 @@ export const updateIncome = async (
   const res = await axiosInstance.put<TCommonRoot>(`${endpoints.income.update}/${id}`, body);
   return res?.data;
 };
+
+export const updatePaymentStatus = async (
+  id: string,
+  body: {
+    paymentStatus: string;
+  }
+) => {
+  const res = await axiosInstance.put<TCommonRoot>(`${endpoints.income.paymentStatus}/${id}`, body);
+  return res?.data;
+};

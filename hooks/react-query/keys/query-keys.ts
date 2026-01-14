@@ -25,6 +25,7 @@ export enum IncomeQuery {
   create = 'income-create',
   list = 'income-list',
   update = 'income-update',
+  updatePaymentStatus = 'income-update-payment-status',
   delete = 'income-delete',
 }
 export enum ExpenseQuery {

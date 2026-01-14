@@ -35,3 +35,8 @@ export enum PaymentMethodEnum {
   UPI = 'upi',
   BANK = 'bank',
 }
+export enum PaymentStatusEnum {
+  UPCOMING = 'upcoming',
+  RECEIVED = 'received',
+  FAILED = 'failed',
+}

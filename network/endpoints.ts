@@ -37,6 +37,7 @@ export const endpoints = {
     update: 'income/update',
     list: 'income/getAll',
     delete: 'income/delete',
+    paymentStatus: 'income/update-payment-status',
   },
   expense: {
     create: 'expense/create',

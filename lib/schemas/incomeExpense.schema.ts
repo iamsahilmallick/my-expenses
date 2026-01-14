@@ -11,6 +11,7 @@ export const incomeSchema = yup.object({
     .positive('Amount must be greater than 0')
     .required('Amount is required'),
   incomeDate: yup.string().trim().required('Income date is required'),
+  paymentStatus: yup.string().trim().required('Income Status is required'),
   categoryId: yup.string().trim().required('Category is required'),
   description: yup.string().trim().max(200).nullable(),
   paymentMethod: yup

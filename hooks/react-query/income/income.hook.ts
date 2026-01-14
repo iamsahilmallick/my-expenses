@@ -1,7 +1,13 @@
 import { TApiParams } from '@/typescripts/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { IncomeQuery } from '../keys/query-keys';
-import { createIncome, getIncomes, incomeDelete, updateIncome } from './income.func';
+import {
+  createIncome,
+  getIncomes,
+  incomeDelete,
+  updateIncome,
+  updatePaymentStatus,
+} from './income.func';
 
 export const useCreateIncome = () =>
   useMutation({
@@ -41,4 +47,18 @@ export const useDeleteIncome = () =>
   useMutation({
     mutationFn: incomeDelete,
     mutationKey: [IncomeQuery.delete],
+  });
+
+export const useUpdatePaymentStatus = () =>
+  useMutation({
+    mutationFn: ({
+      body,
+      id,
+    }: {
+      id: string;
+      body: {
+        paymentStatus: string;
+      };
+    }) => updatePaymentStatus(id, body),
+    mutationKey: [IncomeQuery.updatePaymentStatus],
   });

@@ -2,7 +2,7 @@ import { useGetCategoryList } from '@/hooks/react-query/category/category.hooks'
 import { useCreateIncome, useUpdateIncome } from '@/hooks/react-query/income/income.hook';
 import { toSentenceCase, toYMD } from '@/lib/common/commonUtils';
 import { incomeSchema, IncomeSchemaType } from '@/lib/schemas/incomeExpense.schema';
-import { PaymentMethodEnum } from '@/typescripts/enum/common.enum';
+import { PaymentMethodEnum, PaymentStatusEnum } from '@/typescripts/enum/common.enum';
 import { IIncomeDoc } from '@/typescripts/interfaces/incomeExpense.interfaces';
 import CustomAutocomplete from '@/ui/CustomAutocomplete/CustomAutocomplete';
 import CustomDatePicker from '@/ui/CustomDatePicker/CustomDatePicker';
@@ -66,6 +66,7 @@ const AddEditIncomeDrawer = ({ openDrawer, toggleDrawer, editData, refetch }: Dr
       description: data.description || '',
       categoryId: data.categoryId,
       paymentMethod: data.paymentMethod,
+      paymentStatus: data.paymentStatus,
       incomeDate: toYMD(data.incomeDate, 'YYYY-MM-DD'),
     };
     if (isEditMode && editData?._id) {
@@ -140,6 +141,26 @@ const AddEditIncomeDrawer = ({ openDrawer, toggleDrawer, editData, refetch }: Dr
                 error={Boolean(errors.amount)}
                 helperText={errors.amount?.message}
               />
+            </Box>
+            <Box className="singleFormWrap">
+              <Controller
+                name="paymentStatus"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    {...field}
+                    value={field.value || ''}
+                    initialvalue={field.value ? field.value : 'Payment Status'}
+                  >
+                    {Object.values(PaymentStatusEnum).map(item => (
+                      <MenuItem value={item} key={item}>
+                        {toSentenceCase(item)}
+                      </MenuItem>
+                    ))}
+                  </CustomSelect>
+                )}
+              />
+              <CommonErrorText message={errors.paymentMethod?.message} />
             </Box>
             <Box className="singleFormWrap">
               <Controller
